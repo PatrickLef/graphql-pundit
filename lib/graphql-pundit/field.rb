@@ -10,7 +10,7 @@ module GraphQL
       # Field class that contains authorization and scope behavior
       # This only works with graphql >= 1.8.0
       class Field < GraphQL::Schema::Field
-        prepend GraphQL::Pundit::Scope
+        # prepend GraphQL::Pundit::Scope
         prepend GraphQL::Pundit::Authorization
       end
     end

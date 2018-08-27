@@ -1,3 +1,11 @@
+This fork was created because of a bug when authorization in mutations fail. With this error:
+ArgumentError (wrong number of arguments (given 2, expected 4)):
+when using "prepend GraphQL::Pundit::Scope" in Baseobject
+
+Fork does not fix the error but just disables scopes as its not something thats being used in my app.
+
+--
+
 [![Gem](https://img.shields.io/gem/v/graphql-pundit.svg)](https://rubygems.org/gems/graphql-pundit)
 [![Build Status](https://travis-ci.org/ontohub/graphql-pundit.svg?branch=master)](https://travis-ci.org/ontohub/graphql-pundit)
 [![Coverage Status](https://codecov.io/gh/ontohub/graphql-pundit/branch/master/graph/badge.svg)](https://codecov.io/gh/ontohub/graphql-pundit)
@@ -82,8 +90,8 @@ parent object (in this case probably a `Car` model).
 
 Two styles of declaring fields is supported:
 
-1. the inline style, passing all the options as a hash to the field method
-2. the block style
+1.  the inline style, passing all the options as a hash to the field method
+2.  the block style
 
 Both styles are presented below side by side.
 
@@ -118,9 +126,9 @@ class User < BaseObject
 end
 ```
 
-- `true` will trigger the inference mechanism, meaning that the method that will be called on the policy class will be inferred from the (snake_case) field name.
-- a lambda function that will be called with the parent object, the arguments of the field and the context object; if the lambda returns a truthy value, authorization succeeds; otherwise (including thrown exceptions), authorization fails
-- a string or a symbol that corresponds to the policy method that should be called **minus the "?"**
+* `true` will trigger the inference mechanism, meaning that the method that will be called on the policy class will be inferred from the (snake_case) field name.
+* a lambda function that will be called with the parent object, the arguments of the field and the context object; if the lambda returns a truthy value, authorization succeeds; otherwise (including thrown exceptions), authorization fails
+* a string or a symbol that corresponds to the policy method that should be called **minus the "?"**
 
 ###### `policy`
 
@@ -150,9 +158,9 @@ class User < BaseObject
 end
 ```
 
-- `nil` is the default behavior and results in inferring the policy class from the record (see below)
-- a lambda function that will be called with the parent object, the arguments of the field and the context object; the return value of this function will be used as the policy class
-- an actual policy class
+* `nil` is the default behavior and results in inferring the policy class from the record (see below)
+* a lambda function that will be called with the parent object, the arguments of the field and the context object; the return value of this function will be used as the policy class
+* an actual policy class
 
 ###### `record`
 
@@ -183,9 +191,9 @@ class User < BaseObject
 end
 ```
 
-- `nil` is again used for the inference; in this case, the parent object is used
-- a lambda function, again called with the parent object, the field arguments and the context object; the result will be used as the record
-- any other value that will be used as the record
+* `nil` is again used for the inference; in this case, the parent object is used
+* a lambda function, again called with the parent object, the field arguments and the context object; the result will be used as the record
+* any other value that will be used as the record
 
 Using `record` can be helpful for e.g. mutations, where you need a value to
 initialize the policy with, but for mutations there is no parent object.
@@ -219,9 +227,9 @@ class User < BaseObject
 end
 ```
 
-- `true` will trigger the inference mechanism, where the policy class, which contains the scope class, is inferred based on either the parent object (for `before_scope`) or the result of the resolver (for `after_scope`).
-- a lambda function, that will be called with the parent object (for `before_scope`) or the result of the resolver (for `after_scope`), the field arguments and the context
-- a policy class that contains a `Scope` class (this does not actually have to be a policy class, but could also be a module containing a `Scope` class)
+* `true` will trigger the inference mechanism, where the policy class, which contains the scope class, is inferred based on either the parent object (for `before_scope`) or the result of the resolver (for `after_scope`).
+* a lambda function, that will be called with the parent object (for `before_scope`) or the result of the resolver (for `after_scope`), the field arguments and the context
+* a policy class that contains a `Scope` class (this does not actually have to be a policy class, but could also be a module containing a `Scope` class)
 
 ###### Combining options
 
@@ -234,7 +242,7 @@ field :display_name, ..., authorize: :name,
 
 # UserPolicy#display_name? initialized with user.account_data
 field :display_name, ..., do
-  authorize policy: UserPolicy, 
+  authorize policy: UserPolicy,
             record: ->(obj, args, ctx) { obj.account_data }
 end
 ```
@@ -256,7 +264,7 @@ MySchema = GraphQL::Schema.define do
 end
 ```
 
-By default, `ctx[:current_user]` will be used as the user to authorize. To change that behavior, pass a symbol to `GraphQL::Pundit::Instrumenter`. 
+By default, `ctx[:current_user]` will be used as the user to authorize. To change that behavior, pass a symbol to `GraphQL::Pundit::Instrumenter`.
 
 ```ruby
 GraphQL::Pundit::Instrumenter.new(:me) # will use ctx[:me]
@@ -306,8 +314,8 @@ You can also pass a `lambda` as a record. This receives the usual three argument
 
 You might have also noticed the use of `authorize!` instead of `authorize` in this example. The difference between the two is this:
 
-- `authorize` will set the field to `nil` if authorization fails
-- `authorize!` will set the field to `nil` and add an error to the response if authorization fails
+* `authorize` will set the field to `nil` if authorization fails
+* `authorize!` will set the field to `nil` and add an error to the response if authorization fails
 
 You would normally want to use `authorize` for fields in queries, that only e.g. the owner of something can see, while `authorize!` would be usually used in mutations, where you want to communicate to the client that the operation failed because the user is unauthorized.
 
@@ -359,8 +367,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/ontohub/graphql-pundit.
 
-
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
