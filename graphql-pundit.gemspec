@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'graphql-pundit/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'graphql-pundit'
+  spec.name          = 'graphql-pundit-387'
   spec.version       = GraphQL::Pundit::VERSION
   spec.authors       = ['Ontohub Core Developers']
   spec.email         = ['ontohub-dev-l@ovgu.de']
